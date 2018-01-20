@@ -1,0 +1,24 @@
+{
+  "name": "nodehangman",
+  "version": "1.0.0",
+  "description": "Hangman to be run in the console",
+  "main": "hangman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oitowl7/Hangman-2.git"
+  },
+  "author": "Jordan Shear",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oitowl7/Hangman-2/issues"
+  },
+  "homepage": "https://github.com/oitowl7/Hangman-2#readme",
+  "dependencies": {
+    "inquirer": "^5.0.0",
+    "request": "^2.83.0",
+    "swapi-node": "^0.4.3"
+  }
+}
