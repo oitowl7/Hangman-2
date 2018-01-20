@@ -1,4 +1,146 @@
+var inquirer = require("inquirer");
+var request = require("request");
+var keys = require("./keys.js");
+var hangman = require("./hangman.js");
+var additionalFunctions = require("./additionalfxns.js");
+//creates a random number that chooses the movie that will be used
+var rng = (number) => {
+	randomNumber = Math.floor(Math.random( + 1) * number);
+	return(randomNumber);
+}
+//creates the blank array and the calculates the number of guesses the user will have before he/she wins. Returns an array in the shape of [array, calcedValue]
+var blankmaker = (movieMaster) =>{
+	var movieChanger = [];
+	var guesses = 0
+	for (var i = 0; i < movieMaster.length; i++) {
+		if (movieMaster.charCodeAt(i) >= 65 && movieMaster.charCodeAt(i) <= 90) {
+			// console.log("something happened");
+			movieChanger[i] = "_";
+			guesses++;
+		} else {
+			movieChanger[i] = movieMaster[i];
+		}
+	}
+	var value = [
+		movieChanger, 
+		guesses
+	]
+	return(value);
+}
+//runs after the user wins or loses to give basic information about the move and runs the hangman.js opening screen when the user hits enter
+var getInfo = (movie) => {
+	var omdbKey = keys.keys.omdb;
+	var url = "http://www.omdbapi.com/?apikey=" + omdbKey + "&t=" + movie;
+	request.get(url, (error, response, body) =>{
+		var info = JSON.parse(body);
+		console.log("_____________________")
+		console.log("\nTitle: " + info.Title);
+		console.log("Year: " + info.Year);
+		console.log("Rating: " + info.Rated);
+		console.log("Director: " + info.Director);
+		console.log("Genre Keywords: " + info.Genre);
+		console.log("IMDB Rating: " + info.imdbRating + "\n");
+		console.log("_____________________")
+		//question and inquirer thingys that require user to hit enter to run openingScreen on hangman
+		var question = [
+			{
+				type: "input",
+				message: "press enter to continue",
+				name: "dontmatter"
+			}
+		]
+		inquirer.prompt(question).then((answer) => {
+			hangman.openingScreen[0].fxn();
+		})
+	})
+}
+
+
 exports.movies = [
+{
+	//constructor for the game
+	IMDBMovies: function(){
+		this.rng = rng(249);
+		this.word = exports.movies[this.rng].toUpperCase();
+		this.blankArray = blankmaker(this.word)[0];
+		this.blankString = this.blankArray.join(" ");
+		this.previousGuesses = [];
+		this.guessesAllowed = blankmaker(this.word)[1];
+		this.guessesRemaining = 10;
+		this.guessesMade = 0
+		//primary game script
+		this.game = function(){
+			console.log(this.word);
+			console.log(this.blankString);
+			if (this.guessesRemaining > 0 && this.guessesAllowed != this.guessesMade) {
+				//have to set a variable equal to this due to scoping and such. Only used for validation
+				var prior = this.previousGuesses;
+				//question for the inquirer prompt
+				var question = [
+					{
+						type: "input",
+						message: "Choose a letter",
+						//validates that input is a letter, only one letter is guessed, and that the letter hasn't been used yet
+						validate: function(input){
+							var code = input.toUpperCase().charCodeAt();
+							var beenUsed = false;
+							var tooLong = false;
+							for (var i = 0; i < prior.length; i++){
+								if (input.toUpperCase() === prior[i]){
+									beenUsed = true;
+								}
+							}
+							if (input.length != 1) {
+								console.log("\nPlease enter only 1 letter");
+								return false;
+							} else if (code <= 90 && code >= 65 && beenUsed === false){
+								return true;
+							} else {
+								if (beenUsed === true){
+									console.log("\nThis has already been used");
+								} else {
+									console.log("\nPlease select a letter. No numbers or characters");
+								}
+								return false;
+							}
+						},
+						name: "character"
+					}
+				]
+				//asks the user to pick a question. The .then is where all game logic is
+				inquirer.prompt(question).then((answer) =>{
+					// foundOne is used to determine if the user got a letter right or not. If true, guessesRemaining doesn't iterate
+					var foundOne = false;
+					var uppercase = answer.character.toUpperCase().charAt();
+					//iterates through blankarray checking if the uppercase character is in it
+					for (var i = 0; i < this.word.length; i++){
+						if (this.word.charAt(i) === uppercase){
+							this.blankArray[i] = uppercase;
+							foundOne = true;
+							this.guessesMade++;
+						}
+					}
+					if (foundOne === false) {
+						this.guessesRemaining--;
+					}
+					//pushes uppercase to the previous guesses
+					this.previousGuesses.push(uppercase);
+					this.blankString = this.blankArray.join(" ");
+					this.game();
+				})
+				//this runs if the user has guessed everythign right
+			} else if (this.guessesMade === this.guessesAllowed){
+				console.log("You won!");
+				additionalFunctions.directory[0].getInfo(this.word);
+				// getInfo(this.word);
+				//this runs if the user runs out of guesses
+			} else {
+				console.log("Game over man. Game over");
+				getInfo(this.word);
+			}
+		}
+	}
+},
 "The Shawshank Redemption",
 "The Godfather",
 "The Godfather: Part II",

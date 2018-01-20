@@ -22,7 +22,10 @@ var openingScreen = () => {
 
 	inquirer.prompt(question).then((answers) => {
 		if (answers.selection === "IMDB top 250 movies") {
-			imdbGame();
+			var info;
+			var game = new imdb250.movies[0].IMDBMovies();
+			game.game();
+			// console.log(game);
 		} else if (answers.selection === "AFI top 100 movies") {
 			afiGame();
 		} else if (answers.selection === "Microbrews") {
@@ -35,41 +38,18 @@ var openingScreen = () => {
 	})
 }
 
-var imdbGame = () => {
-	var movieMaster = imdb250.movies[rng(249)].toUpperCase();
-	var movieChanger = movieMaster;
-	console.log(movieMaster)
-	console.log(movieChanger)
-	console.log(movieMaster.charCodeAt(0));
-	for (var i = 0; i < movieChanger.length; i++) {
-		if (movieChanger.charAt(i) > 65 && movieChanger.charAt(i) < 90) {
-			console.log("this ran")
-			movieChanger.charAt(i) = "_";
-		}
-	}
-	console.log(movieChanger);
-}
-
-var afiGame = () => {
-
-}
-
-var beerGame = () => {
-
-}
-
-var starWarsGame = () => {
-
-}
-
-
 var rng = (number) => {
-	randomNumber = Math.floor(Math.random() * number);
+	randomNumber = Math.floor(Math.random( + 1) * number);
 	return(randomNumber);
 }
 
-
-
+exports.openingScreen = [
+	{
+		fxn: () => {
+			openingScreen();
+		}
+	}
+]
 
 
 openingScreen();
