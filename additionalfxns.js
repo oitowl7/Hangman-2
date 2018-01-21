@@ -140,16 +140,21 @@ exports.directory =[
 			})
 		},
 		marvelGetInfo: function(name){
-			name = "deadpool";
+			name = "iron man";
 			marvelPublic = keys.keys.marvelPublic;
 			marvelPrivate = keys.keys.marvelPrivate;
 			ts = moment().unix().toString();
-			console.log(ts);
-			hash = md5(ts+marvelPrivate+marvelPublic)
+			hash = md5(ts+marvelPrivate+marvelPublic);
 			url = "https://gateway.marvel.com:443/v1/public/characters?name=" + name +"&ts=" + ts + "&apikey=" + marvelPublic + "&hash=" + hash;
 			request.get(url, (error, response, body) => {
-				thingy = JSON.parse(body)
-				console.log(thingy.data);
+				thingy = JSON.parse(body);
+				console.log("Name: " + thingy.data.results[0].name);
+				if (!thingy.data.results[0].description || thingy.data.results[0].description === ""){
+					console.log("No description available");
+				} else{
+					console.log("Description: " + thingy.data.results[0].description);
+
+				}
 			})
 		}
 	}]
