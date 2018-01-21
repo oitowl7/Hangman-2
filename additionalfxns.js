@@ -6,6 +6,7 @@ var imdb250 = require('./imdb250.js');
 var beers = require('./beers.js')
 var starwars = require('swapi-node');
 var md5 = require('js-md5');
+var moment = require("moment");
 
 exports.directory =[
 	{
@@ -142,12 +143,13 @@ exports.directory =[
 			name = "deadpool";
 			marvelPublic = keys.keys.marvelPublic;
 			marvelPrivate = keys.keys.marvelPrivate;
-			ts = this.rng(100000);
+			ts = moment().unix().toString();
 			console.log(ts);
 			hash = md5(ts+marvelPrivate+marvelPublic)
-			url = "https://gateway.marvel.com:443/v1/public/characters?name=" + name +"ts=" + ts.toString() + "&apikey=" + marvelPublic + "&hash=" + hash;
+			url = "https://gateway.marvel.com:443/v1/public/characters?name=" + name +"&ts=" + ts + "&apikey=" + marvelPublic + "&hash=" + hash;
 			request.get(url, (error, response, body) => {
-				console.log(body);
+				thingy = JSON.parse(body)
+				console.log(thingy.data);
 			})
 		}
 	}]

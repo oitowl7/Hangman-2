@@ -19,6 +19,7 @@
   "dependencies": {
     "inquirer": "^5.0.0",
     "js-md5": "^0.7.3",
+    "moment": "^2.20.1",
     "request": "^2.83.0",
     "swapi-node": "^0.4.3"
   }
