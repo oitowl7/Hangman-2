@@ -3,25 +3,40 @@ var request = require("request");
 var keys = require("./keys.js");
 var hangman = require("./hangman.js");
 var additionalFunctions = require("./additionalfxns.js");
+var swapi = require("swapi-node")
 
 exports.object = [
 	{
-		BeerConstructor: function(){
-		this.rng = additionalFunctions.directory[0].rng(9);
-		this.word = exports.object[this.rng].name.toUpperCase();
-		this.id = exports.object[this.rng].id;
-		this.blankArray = additionalFunctions.directory[0].blankmaker(this.word)[0];
-		this.blankString = this.blankArray.join(" ");
-		this.previousGuesses = [];
-		this.guessesAllowed = additionalFunctions.directory[0].blankmaker(this.word)[1];
-		this.guessesRemaining = 10;
-		this.guessesMade = 0
-		this.game = function(){
-			console.log(this.word);
-			console.log(this.blankString);
-			if (this.guessesRemaining > 0 && this.guessesAllowed != this.guessesMade) {
+		StarWarsConstructor: function(){
+			this.category = additionalFunctions.directory[0].rngSW(3)[0];
+			this.possibleAnswers = additionalFunctions.directory[0].rngSW(3)[1];
+			this.gameSetup = () => {
+				gameSetup(this.category, this.possibleAnswers);
+			}
+		}
+	}
+]
+
+var gameSetup = function(category, possibleAnswers){
+	var rng = additionalFunctions.directory[0].rng(possibleAnswers.length);
+	var url =  "http://swapi.co/api/" + category + "/" + rng;
+	console.log(rng);
+	swapi.get(url).then((result) =>{
+		// console.log(result);
+		var word1 = result.name;
+		var word = word1.toUpperCase();
+		var blankArray = additionalFunctions.directory[0].blankmaker(word)[0];
+		var blankString = blankArray.join(" ");
+		var previousGuesses = [];
+		var guessesAllowed = additionalFunctions.directory[0].blankmaker(word)[1];
+		var guessesRemaining = 10;
+		var guessesMade = 0
+		var game = function(){
+			console.log(word);
+			console.log(blankString);
+			if (guessesRemaining > 0 && guessesAllowed != guessesMade) {
 				//have to set a variable equal to this due to scoping and such. Only used for validation
-				var prior = this.previousGuesses;
+				var prior = previousGuesses;
 				//question for the inquirer prompt
 				var question = [
 					{
@@ -60,70 +75,31 @@ exports.object = [
 					var foundOne = false;
 					var uppercase = answer.character.toUpperCase().charAt();
 					//iterates through blankarray checking if the uppercase character is in it
-					for (var i = 0; i < this.word.length; i++){
-						if (this.word.charAt(i) === uppercase){
-							this.blankArray[i] = uppercase;
+					for (var i = 0; i < word.length; i++){
+						if (word.charAt(i) === uppercase){
+							blankArray[i] = uppercase;
 							foundOne = true;
-							this.guessesMade++;
+							guessesMade++;
 						}
 					}
 					if (foundOne === false) {
-						this.guessesRemaining--;
+						guessesRemaining--;
 					}
 					//pushes uppercase to the previous guesses
-					this.previousGuesses.push(uppercase);
-					this.blankString = this.blankArray.join(" ");
-					this.game();
+					previousGuesses.push(uppercase);
+					blankString = blankArray.join(" ");
+					game();
 				})
 				//this runs if the user has guessed everythign right
-			} else if (this.guessesMade === this.guessesAllowed){
+			} else if (guessesMade === guessesAllowed){
 				console.log("You won!");
-				additionalFunctions.directory[0].getBeerInfo(this.id);
+				additionalFunctions.directory[0].starWarsInfo(result, category);
 				//this runs if the user runs out of guesses
 			} else {
 				console.log("Game over man. Game over");
-				additionalFunctions.directory[0].getBeerInfo(this.id);
+				additionalFunctions.directory[0].starWarsInfo(result, category);
 			}
 		}
-
-
-			// start: additionalFunctions.directory[0].getBeerInfo();
-		}
-	},
-	{
-		name: "Dark Lord",
-		id:"FhW6gN"
-	},
-	{
-		name: "Kentucky Brunch Brand Stout",
-		id:"yNJUiU"
-	},
-	{
-		name: "Heady Topper",
-		id:"CFIZtr"
-	},
-	{
-		name: "King Julius",
-		id:"ja1toN"
-	},
-	{
-		name: "Pliny the Younger",
-		id:"9UG4pg"
-	},
-	{
-		name: "Zombie Dust",
-		id:"SPClNd"
-	},
-	{
-		name: "Pliny the Elder",
-		id:"XAXGgF"
-	},
-	{
-		name: "Morning Wood",
-		id:"rnZvtV"
-	},
-	{
-		name: "Duck Duck Gooze",
-		id:"rbvEiU"
-	}
-]
+		game();
+	})
+}

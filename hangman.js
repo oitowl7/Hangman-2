@@ -3,8 +3,11 @@ var request = require('request');
 var starwars = require('swapi-node');
 var keys = require('./keys.js');
 var beers = require('./beers.js');
-var movies = require('./movies.js');
+var afiMovies = require('./afimovies.js');
 var imdb250 = require('./imdb250.js');
+var additionalFunctions = require("./additionalfxns.js");
+var starWarsGame = require('./starwars.js');
+var marvel = require('./marvel.js');
 
 // console.log(keys.keys.beers);
 // console.log(movies.movies[1]);
@@ -15,32 +18,28 @@ var openingScreen = () => {
 		{
 			type: "list",
 			message: "Choose your Category",
-			choices: ["IMDB top 250 movies", "AFI top 100 movies", "Microbrews", "Star Wars", "Quit"],
+			choices: ["Marvel Characters", "Star Wars", "Microbrews", "IMDB top 250 movies", "Quit"],
 			name: "selection"
 		}
 	]
 
 	inquirer.prompt(question).then((answers) => {
 		if (answers.selection === "IMDB top 250 movies") {
-			var info;
 			var game = new imdb250.movies[0].IMDBMovies();
 			game.game();
 			// console.log(game);
-		} else if (answers.selection === "AFI top 100 movies") {
-			afiGame();
+		} else if (answers.selection === "Marvel Characters") {
+			additionalFunctions.directory[0].marvelGetInfo();
 		} else if (answers.selection === "Microbrews") {
-			beerGame();
+			var game = new beers.object[0].BeerConstructor();
+			game.game();
 		} else if (answers.selection === "Star Wars") {
-			starWarsGame();
+			var game = new starWarsGame.object[0].StarWarsConstructor();
+			game.gameSetup();
 		} else {
 			return;
 		}
 	})
-}
-
-var rng = (number) => {
-	randomNumber = Math.floor(Math.random( + 1) * number);
-	return(randomNumber);
 }
 
 exports.openingScreen = [

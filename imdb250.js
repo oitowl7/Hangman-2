@@ -4,68 +4,18 @@ var keys = require("./keys.js");
 var hangman = require("./hangman.js");
 var additionalFunctions = require("./additionalfxns.js");
 //creates a random number that chooses the movie that will be used
-var rng = (number) => {
-	randomNumber = Math.floor(Math.random( + 1) * number);
-	return(randomNumber);
-}
 //creates the blank array and the calculates the number of guesses the user will have before he/she wins. Returns an array in the shape of [array, calcedValue]
-var blankmaker = (movieMaster) =>{
-	var movieChanger = [];
-	var guesses = 0
-	for (var i = 0; i < movieMaster.length; i++) {
-		if (movieMaster.charCodeAt(i) >= 65 && movieMaster.charCodeAt(i) <= 90) {
-			// console.log("something happened");
-			movieChanger[i] = "_";
-			guesses++;
-		} else {
-			movieChanger[i] = movieMaster[i];
-		}
-	}
-	var value = [
-		movieChanger, 
-		guesses
-	]
-	return(value);
-}
-//runs after the user wins or loses to give basic information about the move and runs the hangman.js opening screen when the user hits enter
-var getInfo = (movie) => {
-	var omdbKey = keys.keys.omdb;
-	var url = "http://www.omdbapi.com/?apikey=" + omdbKey + "&t=" + movie;
-	request.get(url, (error, response, body) =>{
-		var info = JSON.parse(body);
-		console.log("_____________________")
-		console.log("\nTitle: " + info.Title);
-		console.log("Year: " + info.Year);
-		console.log("Rating: " + info.Rated);
-		console.log("Director: " + info.Director);
-		console.log("Genre Keywords: " + info.Genre);
-		console.log("IMDB Rating: " + info.imdbRating + "\n");
-		console.log("_____________________")
-		//question and inquirer thingys that require user to hit enter to run openingScreen on hangman
-		var question = [
-			{
-				type: "input",
-				message: "press enter to continue",
-				name: "dontmatter"
-			}
-		]
-		inquirer.prompt(question).then((answer) => {
-			hangman.openingScreen[0].fxn();
-		})
-	})
-}
-
 
 exports.movies = [
 {
 	//constructor for the game
 	IMDBMovies: function(){
-		this.rng = rng(249);
+		this.rng = additionalFunctions.directory[0].rng(249);
 		this.word = exports.movies[this.rng].toUpperCase();
-		this.blankArray = blankmaker(this.word)[0];
+		this.blankArray = additionalFunctions.directory[0].blankmaker(this.word)[0];
 		this.blankString = this.blankArray.join(" ");
 		this.previousGuesses = [];
-		this.guessesAllowed = blankmaker(this.word)[1];
+		this.guessesAllowed = additionalFunctions.directory[0].blankmaker(this.word)[1];
 		this.guessesRemaining = 10;
 		this.guessesMade = 0
 		//primary game script
@@ -131,12 +81,11 @@ exports.movies = [
 				//this runs if the user has guessed everythign right
 			} else if (this.guessesMade === this.guessesAllowed){
 				console.log("You won!");
-				additionalFunctions.directory[0].getInfo(this.word);
-				// getInfo(this.word);
+				additionalFunctions.directory[0].getMovieInfo(this.word);
 				//this runs if the user runs out of guesses
 			} else {
 				console.log("Game over man. Game over");
-				getInfo(this.word);
+				additionalFunctions.directory[0].getMovieInfo(this.word);
 			}
 		}
 	}
