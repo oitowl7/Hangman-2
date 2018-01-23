@@ -8,11 +8,7 @@ var imdb250 = require('./imdb250.js');
 var additionalFunctions = require("./additionalfxns.js");
 var starWarsGame = require('./starwars.js');
 var marvel = require('./marvel.js');
-
-// console.log(keys.keys.beers);
-// console.log(movies.movies[1]);
-// console.log(imdb250.movies[14]);
-
+//prompt that will be shown every time the game starts or is re-initialized
 var openingScreen = () => {
 	var question = [
 		{
@@ -22,14 +18,14 @@ var openingScreen = () => {
 			name: "selection"
 		}
 	]
-
 	inquirer.prompt(question).then((answers) => {
 		if (answers.selection === "IMDB top 250 movies") {
 			var game = new imdb250.movies[0].IMDBMovies();
 			game.game();
 			// console.log(game);
 		} else if (answers.selection === "Marvel Characters") {
-			additionalFunctions.directory[0].marvelGetInfo();
+			var game = new marvel.marvel[0].CharacterConstructor();
+			game.game();
 		} else if (answers.selection === "Microbrews") {
 			var game = new beers.object[0].BeerConstructor();
 			game.game();
@@ -41,7 +37,7 @@ var openingScreen = () => {
 		}
 	})
 }
-
+//needed so other js files can access the opening screen function
 exports.openingScreen = [
 	{
 		fxn: () => {

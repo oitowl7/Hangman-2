@@ -8,8 +8,9 @@ var swapi = require("swapi-node")
 exports.object = [
 	{
 		StarWarsConstructor: function(){
-			this.category = additionalFunctions.directory[0].rngSW(3)[0];
-			this.possibleAnswers = additionalFunctions.directory[0].rngSW(3)[1];
+			this.neededInfo = additionalFunctions.directory[0].rngSW(3);
+			this.category = this.neededInfo[0];
+			this.possibleAnswers = this.neededInfo[1];
 			this.gameSetup = () => {
 				gameSetup(this.category, this.possibleAnswers);
 			}
@@ -19,8 +20,12 @@ exports.object = [
 
 var gameSetup = function(category, possibleAnswers){
 	var rng = additionalFunctions.directory[0].rng(possibleAnswers.length);
-	var url =  "http://swapi.co/api/" + category + "/" + rng;
-	console.log(rng);
+	console.log(possibleAnswers);
+	var answerKey = possibleAnswers[rng];
+	var url =  "http://swapi.co/api/" + category + "/" + answerKey;
+	console.log(url);
+	console.log(category)
+	// console.log(rng);
 	swapi.get(url).then((result) =>{
 		// console.log(result);
 		var word1 = result.name;
