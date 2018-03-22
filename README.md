@@ -47,5 +47,6 @@ As mentioned above and that I'm too lazy to move because it's both a technology 
 
 The biggest thing that this project did for me was really hammer home how to get information from public APIs. After this assignment, I didn't have too much trouble with APIs...although I guess we kinda stopped using public ones after this...but still I haven't had many problems with them since then.
 
+***
 ## Issues
 This app runs pretty solidly. One issue that may arise is if the *Star Wars* API changes something in their format. That would essentially blow up that whole category. Other than that, I really haven't been able to break my app. I'll keep trying though.
