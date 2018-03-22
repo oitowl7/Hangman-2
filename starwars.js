@@ -20,14 +20,9 @@ exports.object = [
 
 var gameSetup = function(category, possibleAnswers){
 	var rng = additionalFunctions.directory[0].rng(possibleAnswers.length);
-	console.log(possibleAnswers);
 	var answerKey = possibleAnswers[rng];
 	var url =  "http://swapi.co/api/" + category + "/" + answerKey;
-	console.log(url);
-	console.log(category)
-	// console.log(rng);
 	swapi.get(url).then((result) =>{
-		// console.log(result);
 		var word1 = result.name;
 		var word = word1.toUpperCase();
 		var blankArray = additionalFunctions.directory[0].blankmaker(word)[0];

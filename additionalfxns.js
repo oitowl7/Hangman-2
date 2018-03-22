@@ -103,7 +103,6 @@ exports.directory =[
 		//different numbers filled in its database (ie starships/1 returns a 404)
 		rngSW: (number) => {
 			randomNumber = Math.floor(Math.random() * number) + 1;
-			console.log("Ramdom number: "+ randomNumber);
 			if (randomNumber === 1){
 				return(["starships",[2,3,5,9,10,11,12,13,15,21,22,23,27,28,29,]]);
 			} else if (randomNumber === 2) {
@@ -115,7 +114,6 @@ exports.directory =[
 		//*******************************************************************************************************************************************
 		//gets the info from the rngSW to display the info after the game ends. 
 		starWarsInfo(result, category){
-			console.log(category);
 
 			if (category === "starships"){
 				console.log("________________\n");
