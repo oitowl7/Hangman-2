@@ -22,10 +22,10 @@ After this information is displayed, the user is prompted to "press enter to con
 ![Star Wars Planet](https://i.imgur.com/gVEjOq9.jpg)
 If the user selects *Star Wars*, they go to the *Star Wars* game (shocker!). This is a unique game in this app, but the user experience is essentially the same. On the back-end, however, the app is actually grabbing the word that is being used from the *Star Wars* API randomly instead of grabbing the answer from an array of pre-packaged answers inside the app. 
 
-There are also 3 different types of information that the *Star Wars* API returns: planets, ships, and people. Each one returns a different set of information so the the app has to be able to handle each different type of information coming into it to make sure it can properly display it when the game ends. Above is an example of what a planet game looks like and below are examples of people and ships.
+There are also 3 different types of information that the *Star Wars* API returns: planets, ships, and people. Each one returns a different set of information so the the app has to be able to handle each different type of information coming into it to make sure it can properly display it when the game ends. Above is an example of what a planet game looks like and below are examples of ships and people.
 
-![Star Wars People](https://i.imgur.com/j7Fkj9Z.jpg)
 ![Star Wars Ships](https://i.imgur.com/Ma8rji1.jpg)
+![Star Wars People](https://i.imgur.com/j7Fkj9Z.jpg)
 
 ### Microbrews
 ![Microbrews](https://i.imgur.com/KscRKqF.jpg)
